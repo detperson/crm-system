@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
@@ -7,18 +9,69 @@
 body {
   display: flex;
   justify-content: center;
+  font-family: "Roboto", serif;
 }
 
-.header__color {
-  color: red;
+.app__container {
+  width: 400px;
 }
 
+.app__logo {
+  font-size: 70px;
+  font-weight: 200;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Header */
+.header__form {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.header__input {
+  display: block;
+	width: 100%;
+  font-family: "Roboto", serif;
+  font-size: 16px;
+  font-weight: 400;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #00000033;
+  padding: 8px 4px;
+}
+
+.header__add-button {
+  font-family: "Roboto", serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  padding: 8px 10px;
+  width: 150px;
+  border: none;
+  background: #5292fe;
+  border-radius: 5px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+/* Sorting */
 .sorting__list {
   display: flex;
-  /* временно */
-  gap: 25px;
+  justify-content: space-between;
+  color: #76777b;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 25px 0 10px 0;
 }
 
+.activ-sort {
+  color: #1a86ff;
+  text-decoration: underline;
+}
+
+/* Main */
 .main__task {
   display: flex;
   align-items: center;
@@ -26,15 +79,98 @@ body {
   padding: 15px 10px;
   border: 1px solid lightgray;
   border-radius: 5px;
-  margin: 0 0 10px 0 ;
+  margin: 0 0 15px 0 ;
 }
 
 .main__task_info {
   display: flex;
+  align-items: center;
   gap: 10px;
+}
+
+.main__task_checkbox {
+  appearance: none;
+  position: relative;
+  width: 1.3em;
+  height: 1.3em;
+  background-color: white;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.main__task_checkbox::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 0px;
+  height: 0px;
+  font-size: 8px;
+  background-image: url("../public/checkmark_white.svg");
+  background-repeat: no-repeat;
+}
+
+.main__task_checkbox:checked {
+  background-color: #548cff;
+}
+
+.main__task_checkbox:checked::after {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.main__task_edit_input {
+  font-family: "Roboto", serif;
+  font-size: 16px;
+  font-weight: 400;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #00000033;
+  border-radius: 5px;
+  width: 230px;
+  padding: 3px 4px;
+  background: #f8f8f8;
+}
+
+.main__task_text-complited {
+  color: #76777b;
+  text-decoration: line-through;
 }
 
 .main__task_buttons {
   display: flex;
   gap: 8px;
+}
+
+.main__task_buttons button {
+  font-family: "Roboto", serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #fff;
+  padding: 8px 8px;
+  width: 50px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.main__task_buttons-save {
+  background: #4a9d73;
+}
+
+.main__task_buttons-edit {
+  background: #5292fe;
+}
+
+.main__task_buttons-cansel {
+  background: #b3ada9;
+}
+
+.main__task_buttons-delete {
+  background: #ff6854;
+}
+
+.main__task_buttons img {
+  width: 15px;
 }

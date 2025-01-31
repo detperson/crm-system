@@ -106,12 +106,12 @@ function App() {
   }, [])
 
   return (
-    <>
-      <h1>Todo list app</h1>
+    <div className="app__container">
+      <h1 className="app__logo">Todo</h1>
       <AppHeader createTodo={createTodo}/>
-      <AppSorting todos={todos} setFilter={setFilter}/>
+      <AppSorting todos={todos} filter={filter} setFilter={setFilter}/>
       <AppMain todos={todos} deleteTodo={deleteTodo} changeTodo={changeTodo} filter={filter}/>
-    </>
+    </div>
   )
 }
 

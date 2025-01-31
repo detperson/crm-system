@@ -14,7 +14,7 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }) {
         } else if (filter === 'completed') {
             return todos.data.filter((todo) => todo.isDone)
         }
-        
+        //Не знаю как лучше?
         // return (
         //     todos.data.filter((todo) => {
         //         if (filter === 'all') {
@@ -46,82 +46,67 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }) {
     
     return (
         <div>
-            <h2>Main Component</h2>
-            {/* {todos.data ? (todos.data.map((todo) => (
-                <div className="main__task" key={todo.id}>
-                    <div className="main__task_info">
-                        <input 
-                            type="checkbox" 
-                            defaultChecked={todo.isDone}
-                            onClick={() => changeTodo(todo)}
-                        />
-                        <div>{todo.title}</div>
-                    </div>
-                    <div className="main__task_buttons">
-                        <button>Ред</button>
-                        <button 
-                            onClick={() => deleteTodo(todo.id)}
-                        >
-                            Удалить
-                        </button>
-                    </div>
-                </div>
-            ))) : 
-            'Загрузка...'
-            } */}
-
             {todos.data ? (filteredTodos().map((todo) => (
                 <div className="main__task" key={todo.id}>
                     <div className="main__task_info">
                         <input 
+                            className="main__task_checkbox"
                             type="checkbox" 
                             defaultChecked={todo.isDone}
                             onClick={() => changeTodo(todo)}
                         />
                         {(editing === todo.id) 
                         ?
-                        <input defaultValue={todo.title} onChange={(e) => setNewValue(e.target.value.trim())} />
+                        <input 
+                            className="main__task_edit_input"
+                            defaultValue={todo.title} 
+                            onChange={(e) => setNewValue(e.target.value.trim())} 
+                        />
                         :
-                        <div>{todo.title}</div>}
+                        <div className={todo.isDone ? 'main__task_text-complited' : ''}>
+                            {todo.title}
+                        </div>}
                     </div>
                     <div className="main__task_buttons">
                         {(editing === todo.id)
                         ?
                         <button
+                            className="main__task_buttons-save"
                             onClick={() => handleSaveClick(todo)}
                         >
-                            Сохранить
+                            <img src="/save_icon.svg" alt="save"/>
                         </button>
                         :
                         <button
+                            className="main__task_buttons-edit"
                             onClick={() => {
                                 setNewValue(todo.title)
                                 setEditing(todo.id)
                             }}
                         >
-                            Ред
+                            <img src="/edit_icon.svg" alt="edit"/>
                         </button>}
 
                         {(editing === todo.id)
                         ? 
                         <button 
+                            className="main__task_buttons-cansel"
                             onClick={() => setEditing(0)}
                         >
-                            Отмена
+                            <img src="/cancel_icon.svg" alt="cansel"/>
                         </button>
                         :
                         <button 
+                            className="main__task_buttons-delete"
                             onClick={() => deleteTodo(todo.id)}
                         >
-                            Удалить
+                            <img src="/trash_icon.svg" alt="delete"/>
                         </button>}
                     </div>
                 </div>
             ))) : 
             'Загрузка...'
             }
-            
-            {/* <Task /> */}
         </div>
     )
 }

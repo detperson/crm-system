@@ -8,6 +8,7 @@ export default function AppHeader({ createTodo }) {
         e.preventDefault()
         let value = e.target[0].value.trim()
 
+        //Валидация
         if (value.length >= 2 && value.length <= 64) {
             createTodo(value.toString()) //toString на всякий случай
         } else {
@@ -16,19 +17,24 @@ export default function AppHeader({ createTodo }) {
             return
         }
         
+        setError('')
         e.target[0].value = ''
     }
     
     return (
         <div>
-            <h2 className="header__color">Header!</h2>
-            <form onSubmit={submitForm}>
-                <input 
+            <form 
+            className="header__form"
+                onSubmit={submitForm}
+            >
+                <input
+                    className="header__input"
                     placeholder="Task To Be Done..."
                     type="text"
                     onFocus={() => setError('')}
                 />
                 <button 
+                    className="header__add-button"
                     type="submit"
                 >Add
                 </button>
