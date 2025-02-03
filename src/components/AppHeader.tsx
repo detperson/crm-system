@@ -1,30 +1,34 @@
 import { useState } from "react"
 
-export default function AppHeader({ createTodo }) {
+interface AppHeaderProps {
+    createTodo: (title: string) => void
+}
+
+export default function AppHeader({ createTodo }: AppHeaderProps) {
     const [error, setError] = useState('')
 
-
-    function submitForm(e) {
+    function submitForm(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
-        let value = e.target[0].value.trim()
+        const form = e.target as HTMLFormElement
+        const input = form[0] as HTMLInputElement
+        let value = input.value.trim()
 
         //Валидация
         if (value.length >= 2 && value.length <= 64) {
             createTodo(value.toString()) //toString на всякий случай
         } else {
             setError('Кол-во символов min 2 max 64')
-            console.log('Ошибка строка меньше 2 или больше 64 символов')
             return
         }
         
         setError('')
-        e.target[0].value = ''
+        input.value = ''
     }
     
     return (
         <div>
             <form 
-            className="header__form"
+                className="header__form"
                 onSubmit={submitForm}
             >
                 <input

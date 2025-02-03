@@ -3,12 +3,22 @@ import AppHeader from "./components/AppHeader"
 import AppMain from "./components/AppMain"
 import AppSorting from "./components/AppSorting"
 import { useState } from "react"
+import { ITodo } from "./types/ITodo"
+import { IMetaResponse } from "./types/IMetaResponse"
+import { ITodoInfo } from "./types/ITodoInfo"
+import { TodoSortType } from "./types/TodoSort"
 
 function App() {
-  const [todos, setTodos] = useState({})
-  const [filter, setFilter] = useState('all')
+  const [todos, setTodos] = useState<IMetaResponse<ITodo, ITodoInfo>>({
+    data: [],
+    info: undefined,
+    meta: {
+      totalAmount: 0,
+    },
+  })
+  const [filter, setFilter] = useState<TodoSortType>('all')
 
-  async function changeTodo(todo, value) {
+  async function changeTodo(todo: ITodo, value?: string): Promise<void> {
     try {
       const options = {
         method: 'PUT',
@@ -29,14 +39,13 @@ function App() {
       }
 
       preload()
-      console.log('Изменил todo')
 
     } catch (err) {
       console.log('Ошибка ', err)
     }
   }
   
-  async function createTodo(title) {
+  async function createTodo(title: string) {
     try {
       const options = {
         method: 'POST',
@@ -57,14 +66,13 @@ function App() {
       }
 
       preload()
-      console.log('Создал todo')
 
     } catch (err) {
       console.log('Ошибка ', err)
     }
   }
   
-  async function deleteTodo(id) {
+  async function deleteTodo(id: number) {
     try {
       const options = {
         method: 'DELETE'
@@ -77,14 +85,13 @@ function App() {
       }
 
       preload()
-      console.log('Удалил todo')
 
     } catch (err) {
       console.log('Ошибка ', err)
     }
   }
 
-  async function preload() {
+  async function preload(): Promise<void> {
     try {
       const response = await fetch('https://easydev.club/api/v1/todos')
 
@@ -94,7 +101,7 @@ function App() {
 
       const data = await response.json()
       setTodos(data)
-      console.log('response data', data)
+      return data
 
     } catch(err) {
       console.log('Ошибка ', err)

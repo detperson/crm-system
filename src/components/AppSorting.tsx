@@ -1,4 +1,15 @@
-export default function AppSorting({ todos, filter, setFilter }) {
+import { IMetaResponse } from "../types/IMetaResponse"
+import { ITodo } from "../types/ITodo"
+import { ITodoInfo } from "../types/ITodoInfo"
+import { TodoSortType } from "../types/TodoSort"
+
+interface AppSortingProps {
+    todos: IMetaResponse<ITodo, ITodoInfo>
+    filter: TodoSortType
+    setFilter: React.Dispatch<React.SetStateAction<TodoSortType>>
+}
+
+export default function AppSorting({ todos, filter, setFilter }: AppSortingProps) {
     return (
         <div className="sorting__list">
             <div

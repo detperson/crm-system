@@ -1,12 +1,22 @@
 import { useState } from "react";
-import Task from "./Task";
+import { IMetaResponse } from "../types/IMetaResponse";
+import { ITodo } from "../types/ITodo";
+import { ITodoInfo } from "../types/ITodoInfo";
+import { TodoSortType } from "../types/TodoSort";
 
-export default function AppMain({ todos, deleteTodo, changeTodo, filter }) {
+interface AppMainProps {
+    todos: IMetaResponse<ITodo, ITodoInfo>
+    deleteTodo: (id: number) => Promise<void>
+    changeTodo: (todo: ITodo, value?: string) => Promise<void>
+    filter: TodoSortType
+}
+
+export default function AppMain({ todos, deleteTodo, changeTodo, filter }: AppMainProps) {
     const [editing, setEditing] = useState(0)
     const [newValue, setNewValue] = useState('')
 
 
-    function filteredTodos() {
+    function filteredTodos(): ITodo[] {
         if (filter === 'all') {
             return [...todos.data]
         } else if (filter === 'in-work') {
@@ -14,6 +24,9 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }) {
         } else if (filter === 'completed') {
             return todos.data.filter((todo) => todo.isDone)
         }
+        //Написал этот return потому что без него была ошибка ts (хотя он не нужен)
+        return todos.data
+
         //Не знаю как лучше?
         // return (
         //     todos.data.filter((todo) => {
@@ -28,7 +41,7 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }) {
         // )
     }
 
-    function handleSaveClick(todo) {
+    function handleSaveClick(todo: ITodo) {
         //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
         if (todo.title === newValue) {
             setEditing(0)

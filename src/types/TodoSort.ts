@@ -1,0 +1,1 @@
+export type TodoSortType = 'all' | 'in-work' | 'completed'
