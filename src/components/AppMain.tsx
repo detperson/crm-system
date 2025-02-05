@@ -76,7 +76,7 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }: AppMa
                             onChange={(e) => setNewValue(e.target.value.trim())} 
                         />
                         :
-                        <div className={todo.isDone ? 'main__task_text-complited' : ''}>
+                        <div className={todo.isDone ? 'main__task_text task_text-complited' : 'main__task_text'}>
                             {todo.title}
                         </div>}
                     </div>
