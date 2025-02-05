@@ -1,9 +1,8 @@
-import { useState } from "react";
 import { IMetaResponse } from "../types/IMetaResponse";
 import { ITodo } from "../types/ITodo";
 import { ITodoInfo } from "../types/ITodoInfo";
 import { TodoSortType } from "../types/TodoSort";
-import { fetchDeleteTodo, fetchEditTodo } from "../api/api";
+import { TodoTask } from "./TodoTask";
 
 interface AppMainProps {
     todos: IMetaResponse<ITodo, ITodoInfo>
@@ -12,10 +11,7 @@ interface AppMainProps {
 }
 
 export default function AppMain({ todos, preload, filter }: AppMainProps) {
-    const [editing, setEditing] = useState(0)
-    const [newValue, setNewValue] = useState('')
-
-
+    
     function filteredTodos(): ITodo[] {
         if (filter === 'all') {
             return [...todos.data]
@@ -41,100 +37,10 @@ export default function AppMain({ todos, preload, filter }: AppMainProps) {
         // )
     }
 
-    function handleSaveClick(todo: ITodo) {
-        //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
-        if (todo.title === newValue) {
-            setEditing(0)
-            return
-        }
-
-        if (newValue.length >= 2 && newValue.length <= 64) {
-            changeTodo(todo, newValue)
-            
-            setEditing(0)
-        } else {
-            alert('Значение должно быть от 2 до 64 символов')
-        }
-    }
-
-    async function changeTodo(todo: ITodo, value?: string) {
-        try {
-            await fetchEditTodo(todo, value)
-            await preload()
-        } catch(err) {
-            console.log('Ошибка ', err)
-        }
-    }
-
-    async function handleDeleteTodoClick(id: number) {
-        try {
-            await fetchDeleteTodo(id)
-            await preload()
-        } catch(err) {
-            console.log('Ошибка ', err)
-        }
-    }
-    
     return (
         <div>
             {todos.data ? (filteredTodos().map((todo) => (
-                <div className="main__task" key={todo.id}>
-                    <div className="main__task_info">
-                        <input 
-                            className="main__task_checkbox"
-                            type="checkbox" 
-                            defaultChecked={todo.isDone}
-                            onClick={() => changeTodo(todo)}
-                        />
-                        {(editing === todo.id) 
-                        ?
-                        <input 
-                            className="main__task_edit_input"
-                            defaultValue={todo.title} 
-                            onChange={(e) => setNewValue(e.target.value.trim())} 
-                        />
-                        :
-                        <div className={todo.isDone ? 'main__task_text task_text-complited' : 'main__task_text'}>
-                            {todo.title}
-                        </div>}
-                    </div>
-                    <div className="main__task_buttons">
-                        {(editing === todo.id)
-                        ?
-                        <button
-                            className="main__task_buttons-save"
-                            onClick={() => handleSaveClick(todo)}
-                        >
-                            <img src="/save_icon.svg" alt="save"/>
-                        </button>
-                        :
-                        <button
-                            className="main__task_buttons-edit"
-                            onClick={() => {
-                                setNewValue(todo.title)
-                                setEditing(todo.id)
-                            }}
-                        >
-                            <img src="/edit_icon.svg" alt="edit"/>
-                        </button>}
-
-                        {(editing === todo.id)
-                        ? 
-                        <button 
-                            className="main__task_buttons-cansel"
-                            onClick={() => setEditing(0)}
-                        >
-                            <img src="/cancel_icon.svg" alt="cansel"/>
-                        </button>
-                        :
-                        <button 
-                            className="main__task_buttons-delete"
-                            onClick={() => handleDeleteTodoClick(todo.id)}
-                        >
-                            <img src="/trash_icon.svg" alt="delete"/>
-                        </button>}
-                    </div>
-                </div>
+                <TodoTask key={todo.id} todo={todo} preload={preload} />
             ))) : 
             'Загрузка...'
             }
