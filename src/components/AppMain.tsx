@@ -3,15 +3,15 @@ import { IMetaResponse } from "../types/IMetaResponse";
 import { ITodo } from "../types/ITodo";
 import { ITodoInfo } from "../types/ITodoInfo";
 import { TodoSortType } from "../types/TodoSort";
+import { fetchDeleteTodo, fetchEditTodo } from "../api/api";
 
 interface AppMainProps {
     todos: IMetaResponse<ITodo, ITodoInfo>
-    deleteTodo: (id: number) => Promise<void>
-    changeTodo: (todo: ITodo, value?: string) => Promise<void>
+    preload: () => Promise<void>
     filter: TodoSortType
 }
 
-export default function AppMain({ todos, deleteTodo, changeTodo, filter }: AppMainProps) {
+export default function AppMain({ todos, preload, filter }: AppMainProps) {
     const [editing, setEditing] = useState(0)
     const [newValue, setNewValue] = useState('')
 
@@ -54,6 +54,24 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }: AppMa
             setEditing(0)
         } else {
             alert('Значение должно быть от 2 до 64 символов')
+        }
+    }
+
+    async function changeTodo(todo: ITodo, value?: string) {
+        try {
+            await fetchEditTodo(todo, value)
+            await preload()
+        } catch(err) {
+            console.log('Ошибка ', err)
+        }
+    }
+
+    async function handleDeleteTodoClick(id: number) {
+        try {
+            await fetchDeleteTodo(id)
+            await preload()
+        } catch(err) {
+            console.log('Ошибка ', err)
         }
     }
     
@@ -111,7 +129,7 @@ export default function AppMain({ todos, deleteTodo, changeTodo, filter }: AppMa
                         :
                         <button 
                             className="main__task_buttons-delete"
-                            onClick={() => deleteTodo(todo.id)}
+                            onClick={() => handleDeleteTodoClick(todo.id)}
                         >
                             <img src="/trash_icon.svg" alt="delete"/>
                         </button>}

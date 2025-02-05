@@ -1,13 +1,14 @@
 import { useState } from "react"
+import { fetchAddTodo } from "../api/api"
 
 interface AppHeaderProps {
-    createTodo: (title: string) => void
+    preload: () => Promise<void>
 }
 
-export default function AppHeader({ createTodo }: AppHeaderProps) {
+export default function AppHeader({ preload }: AppHeaderProps) {
     const [error, setError] = useState('')
 
-    function submitForm(e: React.FormEvent<HTMLFormElement>) {
+    async function submitForm(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
         const form = e.target as HTMLFormElement
         const input = form[0] as HTMLInputElement
@@ -15,7 +16,12 @@ export default function AppHeader({ createTodo }: AppHeaderProps) {
 
         //Валидация
         if (value.length >= 2 && value.length <= 64) {
-            createTodo(value.toString()) //toString на всякий случай
+            try {
+                await fetchAddTodo(value.toString()) //toString на всякий случай
+                await preload()
+            } catch(err) {
+                console.log('Ошибка ', err)
+            }
         } else {
             setError('Кол-во символов min 2 max 64')
             return
