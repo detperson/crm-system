@@ -1,48 +1,59 @@
 import { useState } from "react"
-import { ITodo } from "../types/ITodo"
+import { EnumSortStatus, ITodo } from "../types/todos"
 import { fetchDeleteTodo, fetchEditTodo } from "../api/api"
+import { MAX_LENGTH_MESSAGE, MIN_LENGTH_MESSAGE } from "../utils/constants"
 
 interface TodoTaskProps {
     todo: ITodo
-    preload: () => Promise<void>
+    preload: (status?: EnumSortStatus) => Promise<void>
+    filter: EnumSortStatus
 }
 
-export function TodoTask({ todo, preload }: TodoTaskProps) {
-    const [editing, setEditing] = useState(false)
-    const [newValue, setNewValue] = useState('')
+export function TodoTask({ todo, preload, filter }: TodoTaskProps) {
+    const [isEdit, setIsEdit] = useState<boolean>(false)
+    const [newValue, setNewValue] = useState<string>('')
 
     async function changeTodo(todo: ITodo, value?: string) {
         try {
             await fetchEditTodo(todo, value)
-            await preload()
+            await preload(filter)
         } catch(err) {
             console.log('Ошибка ', err)
         }
     }
 
-    function handleSaveClick(todo: ITodo) {
+    function handleSaveClick() {
+        //Удаляю пробелы перед сохранением
+        const newValueTrim = newValue.trim()
+        
         //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
-        if (todo.title === newValue) {
-            setEditing(false)
+        if (todo.title === newValueTrim) {
+            setIsEdit(false)
             return
         }
 
-        if (newValue.length >= 2 && newValue.length <= 64) {
-            changeTodo(todo, newValue)
-            setEditing(false)
+        if (newValueTrim.length >= MIN_LENGTH_MESSAGE && newValueTrim.length <= MAX_LENGTH_MESSAGE) {
+            changeTodo(todo, newValueTrim)
+            setIsEdit(false)
         } else {
-            alert('Значение должно быть от 2 до 64 символов')
+            alert(`Значение должно быть от ${MIN_LENGTH_MESSAGE} до ${MAX_LENGTH_MESSAGE} символов`)
         }
+    }
+
+    function handleEditClick() {
+        setNewValue(todo.title)
+        setIsEdit(true)
     }
 
     async function handleDeleteTodoClick(id: number) {
         try {
             await fetchDeleteTodo(id)
-            await preload()
+            await preload(filter)
         } catch(err) {
             console.log('Ошибка ', err)
         }
     }
+
     
     return (
         <div className="main__task" key={todo.id}>
@@ -53,12 +64,12 @@ export function TodoTask({ todo, preload }: TodoTaskProps) {
                     defaultChecked={todo.isDone}
                     onClick={() => changeTodo(todo)}
                 />
-                {editing
+                {isEdit
                 ?
                 <input 
                     className="main__task_edit_input"
                     defaultValue={todo.title} 
-                    onChange={(e) => setNewValue(e.target.value.trim())} 
+                    onChange={(e) => setNewValue(e.target.value)} 
                 />
                 :
                 <div className={todo.isDone ? 'main__task_text task_text-complited' : 'main__task_text'}>
@@ -66,30 +77,27 @@ export function TodoTask({ todo, preload }: TodoTaskProps) {
                 </div>}
             </div>
             <div className="main__task_buttons">
-                {editing
+                {isEdit
                 ?
                 <button
                     className="main__task_buttons-save"
-                    onClick={() => handleSaveClick(todo)}
+                    onClick={handleSaveClick}
                 >
                     <img src="/save_icon.svg" alt="save"/>
                 </button>
                 :
                 <button
                     className="main__task_buttons-edit"
-                    onClick={() => {
-                        setNewValue(todo.title)
-                        setEditing(true)
-                    }}
+                    onClick={handleEditClick}
                 >
                     <img src="/edit_icon.svg" alt="edit"/>
                 </button>}
 
-                {editing
+                {isEdit
                 ? 
                 <button 
                     className="main__task_buttons-canсel"
-                    onClick={() => setEditing(false)}
+                    onClick={() => setIsEdit(false)}
                 >
                     <img src="/cancel_icon.svg" alt="cancel"/>
                 </button>

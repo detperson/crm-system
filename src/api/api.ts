@@ -1,10 +1,18 @@
-import { IMetaResponse } from "../types/IMetaResponse"
-import { ITodo } from "../types/ITodo"
-import { ITodoInfo } from "../types/ITodoInfo"
+import { EnumSortStatus, IMetaResponse } from "../types/todos"
+import { ITodo } from "../types/todos"
+import { ITodoInfo } from "../types/todos"
 
-export async function fetchData(): Promise<IMetaResponse<ITodo, ITodoInfo>> {
+const BASE_URL = 'https://easydev.club/api/v1'
+
+export async function fetchData(status?: EnumSortStatus): Promise<IMetaResponse<ITodo, ITodoInfo>> {
     try {
-        const response = await fetch('https://easydev.club/api/v1/todos')
+        let params = new URLSearchParams()
+
+        if (status) {
+            params.append('filter', status)
+        }
+        
+        const response = await fetch(`${BASE_URL}/todos${status ? '?' + params : ''}`)
 
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.statusText}`)
@@ -31,7 +39,7 @@ export async function fetchAddTodo(title: string) {
             })
         }
 
-        const response = await fetch('https://easydev.club/api/v1/todos', options)
+        const response = await fetch(`${BASE_URL}/todos`, options)
 
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.statusText}`)
@@ -47,7 +55,7 @@ export async function fetchDeleteTodo(id: number) {
             method: 'DELETE'
         }
 
-        const response = await fetch(`https://easydev.club/api/v1/todos/${id}`, options)
+        const response = await fetch(`${BASE_URL}/todos/${id}`, options)
 
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.statusText}`)
@@ -71,7 +79,7 @@ export async function fetchEditTodo(todo: ITodo, value?: string) {
             })
         }
 
-        const response = await fetch(`https://easydev.club/api/v1/todos/${todo.id}`, options)
+        const response = await fetch(`${BASE_URL}/todos/${todo.id}`, options)
 
         if (!response.ok) {
             throw new Error(`Ошибка: ${response.statusText}`)

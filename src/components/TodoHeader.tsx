@@ -1,12 +1,15 @@
 import { useState } from "react"
 import { fetchAddTodo } from "../api/api"
+import { MAX_LENGTH_MESSAGE, MIN_LENGTH_MESSAGE } from "../utils/constants"
+import { EnumSortStatus } from "../types/todos"
 
-interface AppHeaderProps {
-    preload: () => Promise<void>
+interface TodoHeaderProps {
+    preload: (status?: EnumSortStatus) => Promise<void>
+    filter: EnumSortStatus
 }
 
-export default function AppHeader({ preload }: AppHeaderProps) {
-    const [error, setError] = useState('')
+export default function TodoHeader({ preload, filter }: TodoHeaderProps) {
+    const [error, setError] = useState<string>('')
 
     async function submitForm(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -15,15 +18,15 @@ export default function AppHeader({ preload }: AppHeaderProps) {
         let value = input.value.trim()
 
         //Валидация
-        if (value.length >= 2 && value.length <= 64) {
+        if (value.length >= MIN_LENGTH_MESSAGE && value.length <= MAX_LENGTH_MESSAGE) {
             try {
                 await fetchAddTodo(value.toString()) //toString на всякий случай
-                await preload()
+                await preload(filter)
             } catch(err) {
                 console.log('Ошибка ', err)
             }
         } else {
-            setError('Кол-во символов min 2 max 64')
+            setError(`Кол-во символов min ${MIN_LENGTH_MESSAGE} max ${MAX_LENGTH_MESSAGE}`)
             return
         }
         
