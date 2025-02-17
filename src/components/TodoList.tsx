@@ -1,18 +1,17 @@
-import { EnumSortStatus, ITodo } from "../types/todos";
+import { ITodo } from "../types/todos";
 import { TodoTask } from "./TodoTask";
 
 interface TodoListProps {
     todos: ITodo[]
-    preload: (status?: EnumSortStatus) => Promise<void>
-    filter: EnumSortStatus
+    preloadWithFilter: () => Promise<void>
 }
 
-export default function TodoList({ todos, preload, filter }: TodoListProps) {
+export default function TodoList({ todos, preloadWithFilter }: TodoListProps) {
 
     return (
         <div>
             {todos ? (todos.map((todo) => (
-                <TodoTask key={todo.id} todo={todo} preload={preload} filter={filter} />
+                <TodoTask key={todo.id} todo={todo} preloadWithFilter={preloadWithFilter} />
             ))) : 
             'Загрузка...'
             }

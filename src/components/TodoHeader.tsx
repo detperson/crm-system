@@ -1,14 +1,12 @@
 import { useState } from "react"
 import { fetchAddTodo } from "../api/api"
 import { MAX_LENGTH_MESSAGE, MIN_LENGTH_MESSAGE } from "../utils/constants"
-import { EnumSortStatus } from "../types/todos"
 
 interface TodoHeaderProps {
-    preload: (status?: EnumSortStatus) => Promise<void>
-    filter: EnumSortStatus
+    preloadWithFilter: () => Promise<void>
 }
 
-export default function TodoHeader({ preload, filter }: TodoHeaderProps) {
+export default function TodoHeader({ preloadWithFilter }: TodoHeaderProps) {
     const [error, setError] = useState<string>('')
 
     async function submitForm(e: React.FormEvent<HTMLFormElement>) {
@@ -20,8 +18,8 @@ export default function TodoHeader({ preload, filter }: TodoHeaderProps) {
         //Валидация
         if (value.length >= MIN_LENGTH_MESSAGE && value.length <= MAX_LENGTH_MESSAGE) {
             try {
-                await fetchAddTodo(value.toString()) //toString на всякий случай
-                await preload(filter)
+                await fetchAddTodo(value)
+                await preloadWithFilter() //фильтр уже подставлен в компоненте TodoPage заранее, при передаче в пропс
             } catch(err) {
                 console.log('Ошибка ', err)
             }

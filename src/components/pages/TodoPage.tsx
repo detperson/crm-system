@@ -29,9 +29,9 @@ function TodoPage() {
     return (
         <div className="app__container">
             <h1 className="app__logo">Todo</h1>
-            <TodoHeader preload={preload} filter={filter}/>
+            <TodoHeader preloadWithFilter={() => preload(filter)}/>
             <TodoSorting todosInfo={todosInfo} preload={preload} filter={filter} setFilter={setFilter}/>
-            <TodoList todos={todos} preload={preload} filter={filter}/>
+            <TodoList todos={todos} preloadWithFilter={() => preload(filter)}/>
         </div>
     )
 }

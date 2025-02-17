@@ -1,22 +1,21 @@
 import { useState } from "react"
-import { EnumSortStatus, ITodo } from "../types/todos"
+import { ITodo } from "../types/todos"
 import { fetchDeleteTodo, fetchEditTodo } from "../api/api"
 import { MAX_LENGTH_MESSAGE, MIN_LENGTH_MESSAGE } from "../utils/constants"
 
 interface TodoTaskProps {
     todo: ITodo
-    preload: (status?: EnumSortStatus) => Promise<void>
-    filter: EnumSortStatus
+    preloadWithFilter: () => Promise<void>
 }
 
-export function TodoTask({ todo, preload, filter }: TodoTaskProps) {
+export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [newValue, setNewValue] = useState<string>('')
 
     async function changeTodo(todo: ITodo, value?: string) {
         try {
             await fetchEditTodo(todo, value)
-            await preload(filter)
+            await preloadWithFilter()
         } catch(err) {
             console.log('Ошибка ', err)
         }
@@ -48,7 +47,7 @@ export function TodoTask({ todo, preload, filter }: TodoTaskProps) {
     async function handleDeleteTodoClick(id: number) {
         try {
             await fetchDeleteTodo(id)
-            await preload(filter)
+            await preloadWithFilter()
         } catch(err) {
             console.log('Ошибка ', err)
         }
