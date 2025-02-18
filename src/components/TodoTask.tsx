@@ -48,21 +48,6 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
 
     function handleSaveClick() {
         form.submit()
-        // //Удаляю пробелы перед сохранением
-        // const newValueTrim = newValue.trim()
-        
-        // //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
-        // if (todo.title === newValueTrim) {
-        //     setIsEdit(false)
-        //     return
-        // }
-
-        // if (newValueTrim.length >= MIN_LENGTH_MESSAGE && newValueTrim.length <= MAX_LENGTH_MESSAGE) {
-        //     changeTodo(todo, newValueTrim)
-        //     setIsEdit(false)
-        // } else {
-        //     alert(`Значение должно быть от ${MIN_LENGTH_MESSAGE} до ${MAX_LENGTH_MESSAGE} символов`)
-        // }
     }
 
     function handleEditClick() {
@@ -80,7 +65,6 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
     }
 
     const onFinish: FormProps<FieldType>['onFinish'] = async () => {
-        console.log('форма отправилась onFinish')
         let newValueTrim = newValue.trim()
 
         //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
@@ -93,29 +77,23 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
         // form.resetFields() //очищает форму 
         setIsEdit(false)
         
-    };
+    }
+
+    function handleCancelClick() {
+        form.resetFields()
+        setIsEdit(false)
+    }
 
     
     return (
         <div className="main__task" key={todo.id}>
             <div className="main__task_info">
-                {/* <input 
-                    className="main__task_checkbox"
-                    type="checkbox" 
-                    defaultChecked={todo.isDone}
-                    onClick={() => changeTodo(todo)}
-                /> */}
                 <Checkbox 
                     onClick={() => changeTodo(todo)} 
                     defaultChecked={todo.isDone}
                 />
                 {isEdit
                 ?
-                // <input 
-                //     className="main__task_edit_input"
-                //     defaultValue={todo.title} 
-                //     onChange={(e) => setNewValue(e.target.value)} 
-                // />
                 (<Form 
                     name={`editTodoForm${todo.id}`}
                     form={form}
@@ -161,12 +139,6 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
             <div className="main__task_buttons">
                 {isEdit
                 ?
-                // <button
-                //     className="main__task_buttons-save"
-                //     onClick={handleSaveClick}
-                // >
-                //     <img src="/save_icon.svg" alt="save"/>
-                // </button>
                 //Сохранить кнопка
                 <Button 
                     color="lime" 
@@ -176,12 +148,6 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
                     icon={<CheckCircleOutlined />} 
                 />
                 :
-                // <button
-                //     className="main__task_buttons-edit"
-                //     onClick={handleEditClick}
-                // >
-                //     <img src="/edit_icon.svg" alt="edit"/>
-                // </button>
                 //Редактировать кнопка
                 <Button 
                     color="primary" 
@@ -191,33 +157,17 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
                     icon={<EditOutlined />} 
                 />
                 }
-
                 {isEdit
                 ? 
-                // <button 
-                //     className="main__task_buttons-canсel"
-                //     onClick={() => setIsEdit(false)}
-                // >
-                //     <img src="/cancel_icon.svg" alt="cancel"/>
-                // </button>
                 //Кнопка отмены
                 <Button 
                     color="default" 
                     variant="filled"
                     style={buttonStyle}
-                    onClick={() => {
-                        form.resetFields()
-                        setIsEdit(false)//сделать отд функцию
-                    }}
+                    onClick={handleCancelClick}
                     icon={<CloseCircleOutlined />} 
                 />
                 :
-                // <button 
-                //     className="main__task_buttons-delete"
-                //     onClick={() => handleDeleteTodoClick(todo.id)}
-                // >
-                //     <img src="/trash_icon.svg" alt="delete"/>
-                // </button>
                 //Удалить кнопка
                 <Button 
                     color="danger" 

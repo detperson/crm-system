@@ -82,7 +82,6 @@ export default function TodoHeader({ preloadWithFilter }: TodoHeaderProps) {
                         variant="underlined"
                     />
                 </Form.Item>
-
                 <Form.Item label={null}>
                     <Button
                         style={addButtonStyle}
@@ -94,7 +93,6 @@ export default function TodoHeader({ preloadWithFilter }: TodoHeaderProps) {
                     </Button>
                 </Form.Item>
             </Form>
-
         </div>
     )
 }

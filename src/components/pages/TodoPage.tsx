@@ -11,7 +11,7 @@ const contentStyle: React.CSSProperties = {
     backgroundColor: '#fff',
     display: 'flex',
     justifyContent: 'center',
-};
+}
 
 export function TodoPage() {
     const [todos, setTodos] = useState<ITodo[]>([])
@@ -33,6 +33,16 @@ export function TodoPage() {
     useEffect(() => {
         preload()
     }, [])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            preload(filter)
+        }, 5000) //Таймаут автообновления на 5 секунд
+        
+        return () => {
+            clearTimeout(timer)
+        }
+    }, [preload])
 
     return (
         <Layout.Content style={contentStyle}>
