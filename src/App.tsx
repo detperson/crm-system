@@ -1,7 +1,7 @@
-import TodoPage from "./components/pages/TodoPage"
+import { TodoLayout } from "./components/pages/TodoLayout"
 
 function App() {
-  return <TodoPage />
+  return <TodoLayout />
 }
 
 export default App

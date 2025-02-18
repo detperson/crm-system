@@ -7,8 +7,8 @@
 }
 
 body {
-  display: flex;
-  justify-content: center;
+  /* display: flex;
+  justify-content: center; */
   font-family: "Roboto", serif;
 }
 
@@ -63,7 +63,7 @@ body {
   cursor: pointer;
   font-size: 18px;
   font-weight: 500;
-  margin: 25px 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 .activ-sort {
@@ -148,17 +148,16 @@ body {
   gap: 8px;
 }
 
-.main__task_buttons button {
+/* .main__task_buttons button {
   font-family: "Roboto", serif;
   font-size: 14px;
   font-weight: 400;
-  color: #fff;
   padding: 8px 8px;
   width: 50px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-}
+} */
 
 .main__task_buttons-save {
   background: #4a9d73;

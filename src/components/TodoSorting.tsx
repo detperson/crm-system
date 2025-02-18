@@ -1,3 +1,4 @@
+import { Button } from "antd"
 import { EnumSortStatus, ITodoInfo } from "../types/todos"
 
 interface TodoSortingProps {
@@ -16,24 +17,30 @@ export default function TodoSorting({ todosInfo, preload, filter, setFilter }: T
 
     return (
         <div className="sorting__list">
-            <div
-                className={filter === EnumSortStatus.ALL ? 'activ-sort' : ''}
+            <Button 
+                size="large"
+                variant="link"
+                color={filter === EnumSortStatus.ALL ? "primary" : "default"}
                 onClick={() => handleSortClick(EnumSortStatus.ALL)}
             >
                 Все ({todosInfo.all})
-            </div>
-            <div
-                className={filter === EnumSortStatus.INWORK ? 'activ-sort' : ''}
+            </Button>
+            <Button 
+                size="large"
+                variant="link"
+                color={filter === EnumSortStatus.INWORK ? "primary" : "default"}
                 onClick={() => handleSortClick(EnumSortStatus.INWORK)}
             >
                 в работе ({todosInfo.inWork})
-            </div>
-            <div
-                className={filter === EnumSortStatus.COMPLITED ? 'activ-sort' : ''}
+            </Button>
+            <Button 
+                size="large"
+                variant="link"
+                color={filter === EnumSortStatus.COMPLITED ? "primary" : "default"}
                 onClick={() => handleSortClick(EnumSortStatus.COMPLITED)}
             >
                 сделано ({todosInfo.completed})
-            </div>
+            </Button>
         </div>
     )
 }
