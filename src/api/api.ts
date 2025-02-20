@@ -5,6 +5,10 @@ import axios from "axios"
 
 const BASE_URL = 'https://easydev.club/api/v1'
 
+const instanceUrl = axios.create({
+    baseURL: BASE_URL,
+})
+
 export async function fetchData(status?: EnumSortStatus): Promise<IMetaResponse<ITodo, ITodoInfo>> {
     try {
         let config = {}
@@ -17,7 +21,7 @@ export async function fetchData(status?: EnumSortStatus): Promise<IMetaResponse<
             }
         }
         
-        const response = await axios.get<IMetaResponse<ITodo, ITodoInfo>>(`${BASE_URL}/todos`, config)
+        const response = await instanceUrl.get<IMetaResponse<ITodo, ITodoInfo>>(`/todos`, config)
 
         return response.data
     } catch(err) {
@@ -27,7 +31,7 @@ export async function fetchData(status?: EnumSortStatus): Promise<IMetaResponse<
 
 export async function fetchAddTodo(title: string) {
     try {
-        await axios.post(`${BASE_URL}/todos`, {
+        await instanceUrl.post(`/todos`, {
             "isDone": false,
             "title": title
         },
@@ -45,7 +49,7 @@ export async function fetchAddTodo(title: string) {
 
 export async function fetchDeleteTodo(id: number) {
     try {
-        await axios.delete(`${BASE_URL}/todos/${id}`)
+        await instanceUrl.delete(`/todos/${id}`)
 
     } catch (err) {
         throw err
@@ -55,7 +59,7 @@ export async function fetchDeleteTodo(id: number) {
 export async function fetchEditTodo(todo: ITodo, value?: string) {
     try {
 
-        await axios.put(`${BASE_URL}/todos/${todo.id}`, {
+        await instanceUrl.put(`/todos/${todo.id}`, {
             "isDone": (value ? todo.isDone : !todo.isDone),
             "title": (value ? value : todo.title),
         }, {
