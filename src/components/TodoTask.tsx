@@ -34,7 +34,6 @@ const inputStyle: React.CSSProperties = {
 
 export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
     const [isEdit, setIsEdit] = useState<boolean>(false)
-    const [newValue, setNewValue] = useState<string>('')
     const [form] = Form.useForm()
 
     async function changeTodo(todo: ITodo, value?: string) {
@@ -51,29 +50,29 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
     }
 
     function handleEditClick() {
-        setNewValue(todo.title)
         setIsEdit(true)
     }
 
-    async function handleDeleteTodoClick(id: number) {
+    async function handleDeleteTodoClick() {
         try {
-            await fetchDeleteTodo(id)
+            await fetchDeleteTodo(todo.id)
             await preloadWithFilter()
         } catch(err) {
             console.log('Ошибка ', err)
         }
     }
 
-    const onFinish: FormProps<FieldType>['onFinish'] = async () => {
-        let newValueTrim = newValue.trim()
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        //Сделал проверку потому что ts пишет, что может быть undefined
+        let valueTrim = values.todoText ? values.todoText.trim() : ''
 
         //Что бы не отправлялись лишние запросы на бекенд если ничео не поменялось
-        if (todo.title === newValueTrim) {
+        if (todo.title === valueTrim) {
             setIsEdit(false)
             return
         }
 
-        changeTodo(todo, newValueTrim)
+        changeTodo(todo, valueTrim)
         // form.resetFields() //очищает форму 
         setIsEdit(false)
         
@@ -128,7 +127,6 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
                             size={'large'}
                             style={inputStyle}
                             variant="underlined"
-                            onChange={(e) => setNewValue(e.target.value)}
                         />
                     </Form.Item>
                 </Form>)
@@ -173,7 +171,7 @@ export function TodoTask({ todo, preloadWithFilter }: TodoTaskProps) {
                     color="danger" 
                     variant="solid"
                     style={buttonStyle}
-                    onClick={() => handleDeleteTodoClick(todo.id)} 
+                    onClick={handleDeleteTodoClick} 
                     icon={<DeleteOutlined />} 
                 />
                 }

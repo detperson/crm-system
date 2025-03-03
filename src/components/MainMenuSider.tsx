@@ -1,4 +1,5 @@
 import { Layout, Menu } from "antd";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const siderStyle: React.CSSProperties = {
@@ -6,9 +7,10 @@ const siderStyle: React.CSSProperties = {
     backgroundColor: '#fff',
 }
 
-export function TodoSider() {
+export function MainMenuSider() {
     const location = useLocation()
     const navigate = useNavigate()
+    const [selectedKeys, setSelectedKeys] = useState(['1'])
 
     const items = [
         {
@@ -31,11 +33,19 @@ export function TodoSider() {
         }
     }
 
-    function selectedKeys() {
+    function updateSelectedKeys() {
         const curentItem = items.find((item) => item.path === location.pathname)
 
-        return [`${curentItem?.key}`]
+        if (!curentItem) {
+            return
+        }
+
+        setSelectedKeys([`${curentItem?.key}`])
     }
+
+    useEffect(() => {
+        updateSelectedKeys()
+    }, [location.pathname])
 
     return (
         <Layout.Sider width="25%" style={siderStyle}>
@@ -43,7 +53,7 @@ export function TodoSider() {
                 style={{border: 'none'}}
                 theme="light"
                 mode="inline"
-                defaultSelectedKeys={selectedKeys()}
+                selectedKeys={selectedKeys}
                 items={items}
                 onClick={(item) => handleMenuItemClick(item.key)}
             />

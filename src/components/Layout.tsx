@@ -1,11 +1,11 @@
 import { Layout as LayoutAnt } from "antd";
-import { TodoSider } from "./TodoSider";
+import { MainMenuSider } from "./MainMenuSider";
 import { Outlet } from "react-router-dom";
 
 export function Layout() {
     return (
         <LayoutAnt>
-            <TodoSider />
+            <MainMenuSider />
             <Outlet />
         </LayoutAnt>
     )
