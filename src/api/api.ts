@@ -7,6 +7,10 @@ const BASE_URL = 'https://easydev.club/api/v1'
 
 const instanceUrl = axios.create({
     baseURL: BASE_URL,
+    headers: {
+        // правильный Content-Type для JSON
+        'Content-Type': 'application/json;charset=utf-8'
+    }
 })
 
 export async function fetchData(status?: EnumSortStatus): Promise<IMetaResponse<ITodo, ITodoInfo>> {
@@ -34,12 +38,6 @@ export async function fetchAddTodo(title: string) {
         await instanceUrl.post(`/todos`, {
             "isDone": false,
             "title": title
-        },
-        {
-            headers: {
-                //правильный Content-Type для JSON
-                'Content-Type': 'application/json;charset=utf-8'
-            }
         })
 
     } catch (err) {
@@ -62,11 +60,6 @@ export async function fetchEditTodo(todo: ITodo, value?: string) {
         await instanceUrl.put(`/todos/${todo.id}`, {
             "isDone": (value ? todo.isDone : !todo.isDone),
             "title": (value ? value : todo.title),
-        }, {
-            headers: {
-                //правильный Content-Type для JSON
-                'Content-Type': 'application/json;charset=utf-8'
-            }
         })
 
     } catch (err) {

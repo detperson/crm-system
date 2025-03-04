@@ -1,4 +1,5 @@
 import { Layout, Menu } from "antd";
+import { MenuInfo } from "rc-menu/lib/interface";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -25,8 +26,8 @@ export function MainMenuSider() {
         },
     ]
 
-    function handleMenuItemClick(key: string) {
-        const clickedMenuItem = items.find((item) => item.key === key)
+    function handleMenuItemClick(clickedItem: MenuInfo) {
+        const clickedMenuItem = items.find((item) => item.key === clickedItem.key)
         
         if (clickedMenuItem) {
             navigate(clickedMenuItem.path)
@@ -55,7 +56,7 @@ export function MainMenuSider() {
                 mode="inline"
                 selectedKeys={selectedKeys}
                 items={items}
-                onClick={(item) => handleMenuItemClick(item.key)}
+                onClick={handleMenuItemClick}
             />
         </Layout.Sider>
     )

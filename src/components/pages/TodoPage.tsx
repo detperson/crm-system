@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from "react"
+import { useState, useEffect } from "react"
 import TodoHeader from "../TodoHeader"
 import TodoList from "../TodoList"
 import TodoSorting from "../TodoSorting"
@@ -34,7 +34,7 @@ export function TodoPage() {
         preload()
     }, [])
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         const timer = setInterval(() => {
             preload(filter)
         }, 5000) //Таймаут автообновления на 5 секунд
