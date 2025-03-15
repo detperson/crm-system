@@ -5,19 +5,25 @@ import { ProfilePage } from "./components/pages/ProfilePage"
 import { AuthLayout } from "./components/Layouts/AuthLayout"
 import { LoginPage } from "./components/pages/LoginPage"
 import { RegisterPage } from "./components/pages/RegisterPage"
+import { ProtectedRoutes } from "./ProtectedRoutes"
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<TodoPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+        <Route element={<ProtectedRoutes auth={true} />}>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<TodoPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
         </Route>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="registration" element={<RegisterPage />}/>
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="registration" element={<RegisterPage />}/>
+          </Route>
         </Route>
+        <Route path='*' element={<h2>Нет такой страницы!</h2>} />
       </Routes>
     </BrowserRouter>
   )

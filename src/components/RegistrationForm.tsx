@@ -1,6 +1,8 @@
 import { Button, Form, FormProps, Input, Modal, Result } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchRegistration } from "../api/api";
+import { AxiosError } from "axios";
 
 type FieldType = {
     username: string;
@@ -8,27 +10,37 @@ type FieldType = {
     password: string;
     repeatPassword: string;
     email: string;
-    phoneNumber?: string;
+    phoneNumber: string;
 }
 
 export function RegistrationForm() {
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // const [isSuccessForm, setIsSuccessForm] = useState(true)
-    const isSuccessForm = true //Это удача или неудача, какую форму показывать
+    const [isSuccessForm, setIsSuccessForm] = useState(true)
+    const [modalLoading, setModalLoading] = useState<boolean>(true)
+    const [error, setError] = useState<string | null>(null)
+
     const navigate = useNavigate()
 
-    const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-        console.log('Success:', values);
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        const {repeatPassword, ...correctValues} = values
+
         setIsModalOpen(true)
+        setModalLoading(true)
+        try {
+            await fetchRegistration(correctValues)
+            setIsSuccessForm(true)
+            setModalLoading(false)
+        } catch (err) {
+            if (err instanceof AxiosError) {
+                setError(err.message)
+            } else {
+                setError('Неизвестная ошибка!')
+            }
+            setIsSuccessForm(false)
+            setModalLoading(false)
+            console.error('Ошибка: ', err)
+        }
     }
-
-    // const showModal = () => {
-    //     setIsModalOpen(true);
-    // };
-
-    // const handleOk = () => {
-    //     setIsModalOpen(false);
-    // };
 
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -40,7 +52,6 @@ export function RegistrationForm() {
                 layout='vertical'
                 onFinish={onFinish}
                 autoComplete="off"
-                // size='large'
             >
                 <Form.Item<FieldType>
                     label="Имя пользователя"
@@ -151,21 +162,20 @@ export function RegistrationForm() {
                     <Button 
                         type="primary" 
                         htmlType="submit"
-                        // size='large'
                         style={{ width: '100%', background: 'rgba(127, 38, 91, 1)' }}
                     >
                         Зарегистрироваться
                     </Button>
                 </Form.Item>
             </Form>
-            <Modal open={isModalOpen} onCancel={handleCancel} footer={null}>
+            <Modal open={isModalOpen} loading={modalLoading} onCancel={handleCancel} footer={null}>
                 <Result
                     status={isSuccessForm ? "success" : "warning"}
                     title={isSuccessForm ? "Регистрация прошла успешно!" : "Что-то пошло не так"}
                     subTitle={isSuccessForm ? 
                         "Для входа в систему перейдите на страницу авторизации." 
                         : 
-                        "Такой пользователь уже существует или ошибка сервера."
+                        error
                     }
                     extra={[
                         <Button 
@@ -174,8 +184,7 @@ export function RegistrationForm() {
                             onClick={isSuccessForm ? (() => navigate('/auth/login')) : handleCancel}
                         >
                             {isSuccessForm ? 'Войти' : 'Попробовать снова'}
-                        </Button>,
-                        // <Button key="buy">Buy Again</Button>,
+                        </Button>
                     ]}
                 />
             </Modal>

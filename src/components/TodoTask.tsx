@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ITodo } from "../types/todos"
+import { ITodo } from "../types/types"
 import { fetchDeleteTodo, fetchEditTodo } from "../api/api"
 import { MAX_LENGTH_MESSAGE, MIN_LENGTH_MESSAGE } from "../utils/constants"
 import { Button, Checkbox, Form, FormProps, Input, Typography } from "antd"

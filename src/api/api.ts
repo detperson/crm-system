@@ -1,6 +1,6 @@
-import { EnumSortStatus, IMetaResponse } from "../types/todos"
-import { ITodo } from "../types/todos"
-import { ITodoInfo } from "../types/todos"
+import { EnumSortStatus, IMetaResponse, Profile, UserRegistration } from "../types/types"
+import { ITodo } from "../types/types"
+import { ITodoInfo } from "../types/types"
 import axios from "axios"
 
 const BASE_URL = 'https://easydev.club/api/v1'
@@ -62,6 +62,18 @@ export async function fetchEditTodo(todo: ITodo, value?: string) {
             "title": (value ? value : todo.title),
         })
 
+    } catch (err) {
+        throw err
+    }
+}
+
+//Registration
+
+export async function fetchRegistration(bodyRegRequest: UserRegistration) {
+    try {
+        const response = await instanceUrl.post<Profile>('/auth/signup', bodyRegRequest)
+
+        return response
     } catch (err) {
         throw err
     }
