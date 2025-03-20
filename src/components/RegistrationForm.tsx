@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchRegistration } from "../api/api";
 import { AxiosError } from "axios";
+import { understandebleErrorMessage } from "../utils/utils";
 
 type FieldType = {
     username: string;
@@ -32,7 +33,12 @@ export function RegistrationForm() {
             setModalLoading(false)
         } catch (err) {
             if (err instanceof AxiosError) {
-                setError(err.message)
+                if (err.status) {
+                    const error = understandebleErrorMessage(err.status?.toString())
+                    setError(error)
+                } else {
+                    setError(err.message)
+                }
             } else {
                 setError('Неизвестная ошибка!')
             }

@@ -5,7 +5,7 @@ import { RootState } from "../store";
 export const login = createAsyncThunk(
     'auth/login',
     async (body: AuthData) => {
-        const data: Token = await fetch(
+        const response = await fetch(
             'https://easydev.club/api/v1/auth/signin', 
             {
                 method: 'POST',
@@ -14,7 +14,13 @@ export const login = createAsyncThunk(
                 },
                 body: JSON.stringify(body)
             }
-        ).then(res => res.json())
+        )
+
+        if (!response.ok) {
+            throw new Error(response.status.toString())
+        }
+
+        const data: Token = await response.json()
 
         return data
     }
@@ -71,10 +77,6 @@ export const profile = createAsyncThunk(
         try {
             const state = thunkApi.getState() as RootState
             const accessToken = state.auth.accessToken
-
-            if (!accessToken) {
-                throw new Error('Нет access токена')
-            }
 
             const response = await fetch(
                 'https://easydev.club/api/v1/user/profile', 

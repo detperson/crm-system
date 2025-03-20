@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { login, logout, profile, refresh } from "./thunks"
 import { Profile } from "../../types/types"
+import { understandebleErrorMessage } from "../../utils/utils"
 
 interface InitiaState {
     accessToken?: string
@@ -34,8 +35,9 @@ export const authSlice = createSlice({
 
         // если запрос неудачный (упал)
         builder.addMatcher(login.rejected.match, (_, action) => {
+            const errorMessage = understandebleErrorMessage(action.error.message || 'Ошибка при авторизации')
             return {
-                error: action.error.message,
+                error: errorMessage,
                 authenticated: false
             }
         })
