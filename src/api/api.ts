@@ -1,6 +1,5 @@
-import { EnumSortStatus, IMetaResponse, Profile, UserRegistration } from "../types/types"
-import { ITodo } from "../types/types"
-import { ITodoInfo } from "../types/types"
+import { Profile, UserRegistration } from "../types/authTypes"
+import { ITodo, ITodoInfo, EnumSortStatus, IMetaResponse } from "../types/todoTypes"
 import axios from "axios"
 
 const BASE_URL = 'https://easydev.club/api/v1'

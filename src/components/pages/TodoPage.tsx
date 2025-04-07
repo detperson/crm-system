@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import TodoHeader from "../TodoHeader"
 import TodoList from "../TodoList"
 import TodoSorting from "../TodoSorting"
-import { EnumSortStatus, ITodo, ITodoInfo } from "../../types/types"
+import { EnumSortStatus, ITodo, ITodoInfo } from "../../types/todoTypes"
 import { fetchData } from "../../api/api"
 import { Layout } from "antd"
 

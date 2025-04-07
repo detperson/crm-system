@@ -1,13 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { login, logout, profile, refresh } from "./thunks"
-import { Profile } from "../../types/types"
+import { Profile } from "../../types/authTypes"
 import { understandebleErrorMessage } from "../../utils/utils"
 
 interface InitiaState {
     accessToken?: string
     refreshToken?: string
     error?: string
-    authenticated?: boolean
+    authenticated: boolean
     profile?: Profile 
 }
 
@@ -44,10 +44,12 @@ export const authSlice = createSlice({
 
         //Профиль
         builder.addMatcher(profile.fulfilled.match, (state, action) => {
+            console.log('в успешно fullf профиль')
             state.profile = action.payload
         })
 
         builder.addMatcher(profile.rejected.match, (state) => {
+            console.log('не успешно в rej профиль')
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')
             state.authenticated = false
@@ -68,6 +70,7 @@ export const authSlice = createSlice({
 
         //Refresh
         builder.addMatcher(refresh.fulfilled.match, (_, action) => {
+            console.log('в успешно fullf рефреш')
             localStorage.setItem('access', action.payload.accessToken)
             localStorage.setItem('refresh', action.payload.refreshToken)
 
@@ -79,6 +82,7 @@ export const authSlice = createSlice({
         })
 
         builder.addMatcher(refresh.rejected.match, (state) => {
+            console.log('не успешно в rej рефреш')
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')
             state.authenticated = false
