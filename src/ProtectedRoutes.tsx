@@ -6,10 +6,14 @@ interface IProtectedRoutes {
 }
 
 export const ProtectedRoutes = ({ auth = false }: IProtectedRoutes) => {
-    
     const authenticated = useAppSelector(store => store.auth.authenticated)
+    const isRefreshLoading = useAppSelector(store => store.auth.isRefreshLoading)
 
     if (authenticated === undefined) {
+        return null
+    }
+
+    if (isRefreshLoading) {
         return null
     }
     

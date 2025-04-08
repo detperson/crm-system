@@ -8,13 +8,15 @@ interface InitiaState {
     refreshToken?: string
     error?: string
     authenticated: boolean
-    profile?: Profile 
+    profile?: Profile,
+    isRefreshLoading?: boolean
 }
 
 const initialState: InitiaState = {
     accessToken: localStorage.getItem('access') || undefined,
     refreshToken: localStorage.getItem('refresh') || undefined,
-    authenticated: (localStorage.getItem('refresh') ? true : false),
+    authenticated: false,
+    isRefreshLoading: true
 }
 
 export const authSlice = createSlice({
@@ -44,12 +46,10 @@ export const authSlice = createSlice({
 
         //Профиль
         builder.addMatcher(profile.fulfilled.match, (state, action) => {
-            console.log('в успешно fullf профиль')
             state.profile = action.payload
         })
 
         builder.addMatcher(profile.rejected.match, (state) => {
-            console.log('не успешно в rej профиль')
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')
             state.authenticated = false
@@ -70,22 +70,22 @@ export const authSlice = createSlice({
 
         //Refresh
         builder.addMatcher(refresh.fulfilled.match, (_, action) => {
-            console.log('в успешно fullf рефреш')
             localStorage.setItem('access', action.payload.accessToken)
             localStorage.setItem('refresh', action.payload.refreshToken)
 
             return {
                 accessToken: action.payload.accessToken,
                 refreshToken: action.payload.refreshToken,
-                authenticated: true
+                authenticated: true,
+                isRefreshLoading: false
             }
         })
 
         builder.addMatcher(refresh.rejected.match, (state) => {
-            console.log('не успешно в rej рефреш')
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')
             state.authenticated = false
+            state.isRefreshLoading = false
         })
     },
 })

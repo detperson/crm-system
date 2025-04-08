@@ -6,8 +6,17 @@ import { AuthLayout } from "./components/Layouts/AuthLayout"
 import { LoginPage } from "./components/pages/LoginPage"
 import { RegisterPage } from "./components/pages/RegisterPage"
 import { ProtectedRoutes } from "./ProtectedRoutes"
+import { useEffect } from "react"
+import { useAppDispatch } from "./store/hooks"
+import { refresh } from "./store/auth"
 
 function App() {
+  //При первой загрузке проверяю авторизован пользователь или нет
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(refresh())
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
