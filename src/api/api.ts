@@ -1,8 +1,7 @@
 import { Profile, UserRegistration } from "../types/authTypes"
 import { ITodo, ITodoInfo, EnumSortStatus, IMetaResponse } from "../types/todoTypes"
 import axios from "axios"
-
-const BASE_URL = 'https://easydev.club/api/v1'
+import { BASE_URL } from "../utils/constants"
 
 const instanceUrl = axios.create({
     baseURL: BASE_URL,

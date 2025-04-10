@@ -1,8 +1,16 @@
 import { Flex, Image, Layout as LayoutAnt } from "antd";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import authLogo from "../../assets/auth.svg"
+import { useAppSelector } from "../../store/hooks";
 
 export function AuthLayout() {
+    const isAuthenticated = useAppSelector((store) => store.auth.authenticated)
+    
+    //Перенаправляем внутрь, если уже авторизарван
+    if (isAuthenticated) {
+        return <Navigate to={'/'} />
+    }
+    
     return (
         <LayoutAnt style={{ background: '#fff' }}>
             <Flex gap="middle">

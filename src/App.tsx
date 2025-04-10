@@ -26,11 +26,9 @@ function App() {
             <Route path="profile" element={<ProfilePage />} />
           </Route>
         </Route>
-        <Route element={<ProtectedRoutes />}>
-          <Route path="/auth" element={<AuthLayout />}>
-            <Route path="login" element={<LoginPage />} />
-            <Route path="registration" element={<RegisterPage />}/>
-          </Route>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="registration" element={<RegisterPage />}/>
         </Route>
         <Route path='*' element={<h2>Нет такой страницы!</h2>} />
       </Routes>
