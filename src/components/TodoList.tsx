@@ -1,4 +1,4 @@
-import { ITodo } from "../types/todos";
+import { ITodo } from "../types/todoTypes";
 import { TodoTask } from "./TodoTask";
 
 interface TodoListProps {

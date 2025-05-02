@@ -1,16 +1,36 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-import { Layout } from "./components/Layout"
+import { MainLayout } from "./components/Layouts/MainLayout"
 import { TodoPage } from "./components/pages/TodoPage"
 import { ProfilePage } from "./components/pages/ProfilePage"
+import { AuthLayout } from "./components/Layouts/AuthLayout"
+import { LoginPage } from "./components/pages/LoginPage"
+import { RegisterPage } from "./components/pages/RegisterPage"
+import { ProtectedRoutes } from "./ProtectedRoutes"
+import { useEffect } from "react"
+import { useAppDispatch } from "./store/hooks"
+import { refresh } from "./store/auth"
 
 function App() {
+  //При первой загрузке проверяю авторизован пользователь или нет
+  const dispatch = useAppDispatch()
+  useEffect(() => {
+    dispatch(refresh())
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<TodoPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+        <Route element={<ProtectedRoutes auth={true} />}>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<TodoPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+          </Route>
         </Route>
+        <Route path="/auth" element={<AuthLayout />}>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="registration" element={<RegisterPage />}/>
+        </Route>
+        <Route path='*' element={<h2>Нет такой страницы!</h2>} />
       </Routes>
     </BrowserRouter>
   )

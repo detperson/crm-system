@@ -1,5 +1,5 @@
 import { Button } from "antd"
-import { EnumSortStatus, ITodoInfo } from "../types/todos"
+import { EnumSortStatus, ITodoInfo } from "../types/todoTypes"
 
 interface TodoSortingProps {
     todosInfo: ITodoInfo

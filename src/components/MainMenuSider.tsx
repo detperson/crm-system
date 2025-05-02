@@ -21,7 +21,7 @@ export function MainMenuSider() {
         },
         {
             key: '2',
-            label: 'Профиль',
+            label: 'Личный кабинет',
             path: '/profile'
         },
     ]
